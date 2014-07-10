@@ -4,7 +4,10 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_ANDROID && !UNITY_EDITOR
+#else
 using System.Net.Sockets;
+#endif
 using System.Globalization;
 using System.Threading;
 using System.Net.Security;
@@ -144,6 +147,10 @@ namespace HTTP
         }
 		
 		private void GetResponse() {
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+            throw new Exception("Can not continue");
+#else
             System.Diagnostics.Stopwatch curcall = new System.Diagnostics.Stopwatch();
 	        curcall.Start();
 			try {
@@ -236,7 +243,8 @@ namespace HTTP
                     Debug.LogWarning( InfoString( VerboseLogging ) );
                 }
 #endif
-            }			
+            }
+#endif
 		}
 		
 		public void Send( Action< HTTP.Request > callback )
